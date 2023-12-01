@@ -27,7 +27,7 @@ foreach (var line in lines)
             count++;
         }
 
-        if(line.LastIndexOf(numberStrings[i]) > maxNumberStringIndex)
+        if(line.LastIndexOf(numberStrings[i]) > minNumberStringIndex)
         {
             minNumberStringIndex = line.LastIndexOf(numberStrings[i]);
             maxNumberStringInt = numberInts[i];
