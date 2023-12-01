@@ -1,39 +1,40 @@
 ﻿var lines = File.ReadAllLines("input.txt");
 var sum = 0;
-foreach (var line in lines)
-{
-    var nums = "";
-    var digits = line.Where(Char.IsDigit).ToArray();
-    nums += digits[0].ToString() + digits[digits.Length - 1].ToString();
-    sum += Int32.Parse(nums);
-}
+//foreach (var line in lines)
+//{
+//    var nums = "";
+//    var digits = line.Where(Char.IsDigit).ToArray();
+//    nums += digits[0].ToString() + digits[digits.Length - 1].ToString();
+//    sum += Int32.Parse(nums);
+//}
 
 sum = 0;
 var indexNumberStrings = new List<string> { "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
 var indexNumberInts = new List<int> {1,2,3,4,5,6,7,8,9};
 foreach (var line in lines)
 {
-    var minIndexNumberString = -1;
-    var maxIndexNumberString = -1;
-    var minNumberInt = -1;
-    var maxNumberInt = -1;
+    var maxNumberStringIndex = -1;
+    var minNumberStringIndex = -1;
+    var minNumberStringInt = -1;
+    var maxNumberStringInt = -1;
     int count = 0;
     foreach (var number in indexNumberStrings)
     {
-        if(line.IndexOf(number) > minIndexNumberString)
+        if(line.IndexOf(number) >= 0 && count == 0)
         {
-            minIndexNumberString = line.IndexOf(number);
-            minNumberInt = indexNumberInts[count];
+            maxNumberStringIndex = line.IndexOf(number);
+            minNumberStringInt = indexNumberInts[count];
+            count++;
         }
 
-        if(line.LastIndexOf(number) > maxIndexNumberString)
+        if(line.LastIndexOf(number) > maxNumberStringIndex)
         {
-            maxIndexNumberString = line.LastIndexOf(number);
-            maxNumberInt = indexNumberInts[count];
+            minNumberStringIndex = line.LastIndexOf(number);
+            maxNumberStringInt = indexNumberInts[count];
         }
         count++;
     }
-
+    Console.WriteLine($"{minNumberStringInt}{maxNumberStringInt}");
 
 }
 
