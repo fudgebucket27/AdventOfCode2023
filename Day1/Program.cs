@@ -27,6 +27,17 @@ foreach (var line in lines)
         var first = line.IndexOf(numberStrings[i]);
         var last = line.LastIndexOf(numberStrings[i]);
         Console.WriteLine($"Current num: {numberStrings[i]}, First: {first}, Last: {last}");
+        if(first <= last)
+        {
+            minNumberStringIndex = first;
+            minNumberStringInt = numberInts[i];
+        }
+
+        if(last >= first)
+        {
+            maxNumberStringIndex = last;
+            maxNumberStringInt = numberInts[i];
+        }
         Console.WriteLine($"{minNumberStringInt},{maxNumberStringInt}");
     }
     Console.WriteLine($"FINAL {minNumberStringInt}{maxNumberStringInt}");
