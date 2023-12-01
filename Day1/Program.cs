@@ -10,6 +10,7 @@ var sum = 0;
 
 sum = 0;
 var numberStrings = new List<string> { "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
+var numberIntStrings = new List<string> { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 var numberInts = new List<int> {1,2,3,4,5,6,7,8,9};
 foreach (var line in lines)
 {
@@ -20,20 +21,22 @@ foreach (var line in lines)
     int count = 0;
     for(int i=0; i < numberStrings.Count(); i++)
     {
-        if (line.IndexOf(numberStrings[i]) >= 0 && count == 0)
+        Console.WriteLine("Current num:" + numberStrings[i]);
+        if (line.IndexOf(numberStrings[i]) < maxNumberStringIndex)
         {
-            maxNumberStringIndex = line.IndexOf(numberStrings[i]);
+            minNumberStringIndex = line.IndexOf(numberStrings[i]);
             minNumberStringInt = numberInts[i];
             count++;
         }
 
         if(line.LastIndexOf(numberStrings[i]) > minNumberStringIndex)
         {
-            minNumberStringIndex = line.LastIndexOf(numberStrings[i]);
+            maxNumberStringIndex = line.LastIndexOf(numberStrings[i]);
             maxNumberStringInt = numberInts[i];
         }
+        Console.WriteLine($"{minNumberStringInt},{maxNumberStringInt}");
     }
-    Console.WriteLine($"{minNumberStringInt}{maxNumberStringInt}");
+    Console.WriteLine($"FINAL {minNumberStringInt}{maxNumberStringInt}");
 
 }
 
