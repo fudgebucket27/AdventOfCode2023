@@ -1,4 +1,6 @@
-﻿var lines = File.ReadAllLines("input.txt");
+﻿using Microsoft.VisualBasic;
+
+var lines = File.ReadAllLines("input.txt");
 var sum = 0;
 //foreach (var line in lines)
 //{
@@ -14,26 +16,17 @@ var numberIntStrings = new List<string> { "1", "2", "3", "4", "5", "6", "7", "8"
 var numberInts = new List<int> {1,2,3,4,5,6,7,8,9};
 foreach (var line in lines)
 {
+    Console.WriteLine("Current Line:" + line);
     var maxNumberStringIndex = -1;
     var minNumberStringIndex = -1;
     var minNumberStringInt = -1;
     var maxNumberStringInt = -1;
     int count = 0;
-    for(int i=0; i < numberStrings.Count(); i++)
+    for(int i=0; i < numberStrings.Count(); i++) 
     {
-        Console.WriteLine("Current num:" + numberStrings[i]);
-        if (line.IndexOf(numberStrings[i]) < maxNumberStringIndex)
-        {
-            minNumberStringIndex = line.IndexOf(numberStrings[i]);
-            minNumberStringInt = numberInts[i];
-            count++;
-        }
-
-        if(line.LastIndexOf(numberStrings[i]) > minNumberStringIndex)
-        {
-            maxNumberStringIndex = line.LastIndexOf(numberStrings[i]);
-            maxNumberStringInt = numberInts[i];
-        }
+        var first = line.IndexOf(numberStrings[i]);
+        var last = line.LastIndexOf(numberStrings[i]);
+        Console.WriteLine($"Current num: {numberStrings[i]}, First: {first}, Last: {last}");
         Console.WriteLine($"{minNumberStringInt},{maxNumberStringInt}");
     }
     Console.WriteLine($"FINAL {minNumberStringInt}{maxNumberStringInt}");
