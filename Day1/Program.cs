@@ -9,6 +9,7 @@ var sum = 0;
 //    nums += digits[0].ToString() + digits[digits.Length - 1].ToString();
 //    sum += Int32.Parse(nums);
 //}
+//Console.WriteLine(sum);
 
 sum = 0;
 var numberStrings = new List<string> { "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
