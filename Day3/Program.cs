@@ -38,7 +38,7 @@ foreach (var line in lines)
                 schematic = new Schematic()
                 {
                     LineNumber = lineCount,
-                    isSymbol = false,
+                    IsSymbol = false,
                     ScehmaticText = scanned
                 };
             }
@@ -54,7 +54,7 @@ foreach (var line in lines)
                 schematic = new Schematic()
                 {
                     LineNumber = lineCount,
-                    isSymbol = false,
+                    IsSymbol = false,
                     ScehmaticText = scanned
                 };
                 schematics.Add(schematic);
@@ -64,7 +64,7 @@ foreach (var line in lines)
             schematic = new Schematic()
             {
                 LineNumber = lineCount,
-                isSymbol = true,
+                IsSymbol = true,
                 ScehmaticText = scanned
             };     
         }
