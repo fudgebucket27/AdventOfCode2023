@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-var lines = File.ReadAllLines("input.txt");
+﻿var lines = File.ReadAllLines("input.txt");
 
 //Part 1
 var sum = 0;
