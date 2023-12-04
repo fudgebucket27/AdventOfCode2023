@@ -31,7 +31,7 @@ Console.WriteLine(points);
 
 points = 0;
 var cardNumber = 0;
-Dictionary<int,int> cards = new Dictionary<int,int>();
+Dictionary<string,int> cards = new Dictionary<string,int>();
 foreach (var line in lines)
 {
     cardNumber++;
@@ -57,27 +57,23 @@ foreach (var line in lines)
     for (int i = 0; i < matches; i++)
     {
         int currentCard = cardNumber + i;
-
-        if (!cards.ContainsKey(currentCard))
+        var originalKey = "O:" + currentCard;
+        var copyKey = "C:" + currentCard;
+        if (!cards.ContainsKey(originalKey))
         {
-            cards.Add(currentCard, 1); // or 1, if you want to count the card itself regardless of matches
+            cards.Add(originalKey, 1); // or 1, if you want to count the card itself regardless of matches
             Console.WriteLine($"Adding original card: {currentCard}");
         }
-        else
+        
+        if(!cards.ContainsKey(copyKey))
         {
-            if(currentCard == cardNumber)
-            {
-                cards[currentCard] += 1; // or increment by 1, depending on your requirements
-            }
-            else
-            {
-                for (int j = 0; j < matches; j++)
-                {
-                    var currentCardCopy = cardNumber + j;
-                    cards[currentCardCopy] += 1; // or increment by 1, depending on your requirements
-                }
-            }
-            Console.WriteLine($"Updating card: {currentCard}, Count={cards[cardNumber]}");
+            cards.Add(copyKey, 1); // or 1, if you want to count the card itself regardless of matches
+            Console.WriteLine($"Updating card: {currentCard}, Count={cards[copyKey]}");
+        }
+
+        if(i > 0)
+        {
+            cards[copyKey] += 1; // or 1, i
         }
     }
 }
