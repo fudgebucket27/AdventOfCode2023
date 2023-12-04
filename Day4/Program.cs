@@ -68,12 +68,13 @@ foreach (var line in lines)
         if(!cards.ContainsKey(copyKey))
         {
             cards.Add(copyKey, 1); // or 1, if you want to count the card itself regardless of matches
-            Console.WriteLine($"Updating card: {currentCard}, Count={cards[copyKey]}");
+            Console.WriteLine($"Copying card: {currentCard}, Count={cards[copyKey]}");
         }
 
         if(cards.ContainsKey(copyKey))
         {
             cards[copyKey] += 1; // or 1, i
+            Console.WriteLine($"Copying card: {currentCard}, Count={cards[copyKey]}");
         }
     }
 }
