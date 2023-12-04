@@ -51,7 +51,6 @@ foreach (var line in lines)
             }
         }
     }
-
     matches += 1;
 
     Console.WriteLine($"Card {cardNumber} Results: ");
@@ -66,9 +65,24 @@ foreach (var line in lines)
         }
         else
         {
-            cards[currentCard] += 1; // or increment by 1, depending on your requirements
+            if(currentCard == cardNumber)
+            {
+                cards[currentCard] += 1; // or increment by 1, depending on your requirements
+            }
+            else
+            {
+                for (int j = 0; j < matches; j++)
+                {
+                    var currentCardCopy = cardNumber + j;
+                    cards[currentCardCopy] += 1; // or increment by 1, depending on your requirements
+                }
+            }
             Console.WriteLine($"Updating card: {currentCard}, Count={cards[cardNumber]}");
         }
     }
 }
-Console.WriteLine(cards.Sum(x=> x.Value));
+foreach(var card in cards)
+{
+    Console.WriteLine($"Card: {card.Key}, Count: {card.Value}");
+}
+Console.WriteLine("Sum:"+cards.Sum(x=> x.Value));
