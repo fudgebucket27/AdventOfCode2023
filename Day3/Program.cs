@@ -4,14 +4,8 @@ using System.Data;
 var lines = File.ReadAllLines("input.txt");
 var schematics = new List<Schematic>();
 
-int west = 0;
-int east = 0;
-int south = 0;
-int north = 0;
-int southwest = 0;
-int southeast = 0;
-int northwest = 0;
-int northeast = 0;
+int x = 0;
+int y= 0;
 
 int lineCount = 0;
 foreach (var line in lines)
@@ -39,7 +33,9 @@ foreach (var line in lines)
                 {
                     LineNumber = lineCount,
                     IsSymbol = false,
-                    ScehmaticText = scanned
+                    ScehmaticText = scanned,
+                    X = x,
+                    Y = y
                 };
             }
             else
@@ -55,7 +51,9 @@ foreach (var line in lines)
                 {
                     LineNumber = lineCount,
                     IsSymbol = false,
-                    ScehmaticText = scanned
+                    ScehmaticText = scanned,
+                    X = x,
+                    Y = y
                 };
                 schematics.Add(schematic);
             }
@@ -65,13 +63,17 @@ foreach (var line in lines)
             {
                 LineNumber = lineCount,
                 IsSymbol = true,
-                ScehmaticText = scanned
+                ScehmaticText = scanned,
+                X = x,
+                Y = y
             };     
         }
+        x++;
     }
+    y++;
 }
 
 foreach(var schematic in schematics)
 {
-    Console.WriteLine("Schematic:" + schematic.ScehmaticText + ", Line:" +schematic.LineNumber);
+    Console.WriteLine("Schematic:" + schematic.ScehmaticText + ", Line:" +schematic.LineNumber + ",X:" + schematic.X + ",Y:" + schematic.Y);
 }

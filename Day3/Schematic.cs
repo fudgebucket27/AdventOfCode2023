@@ -10,7 +10,8 @@ namespace Day3
     {
         public string ScehmaticText { get; set; }
         public bool IsSymbol { get; set; } = false;
-        public (int x, int y) Coordinates { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
         public int LineNumber { get; set; }
     }
 }
