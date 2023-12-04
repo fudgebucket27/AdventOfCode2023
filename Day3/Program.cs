@@ -34,8 +34,8 @@ foreach (var line in lines)
                     LineNumber = lineCount,
                     IsSymbol = false,
                     ScehmaticText = scanned,
-                    X = x,
-                    Y = y
+                    minX = x,
+                    minY = y
                 };
             }
             else
@@ -52,8 +52,8 @@ foreach (var line in lines)
                     LineNumber = lineCount,
                     IsSymbol = false,
                     ScehmaticText = scanned,
-                    X = x,
-                    Y = y
+                    minX = x,
+                    minY = y
                 };
                 schematics.Add(schematic);
             }
@@ -64,8 +64,8 @@ foreach (var line in lines)
                 LineNumber = lineCount,
                 IsSymbol = true,
                 ScehmaticText = scanned,
-                X = x,
-                Y = y
+                minX = x,
+                minY = y
             };     
         }
         x++;
@@ -73,7 +73,17 @@ foreach (var line in lines)
     y++;
 }
 
-foreach(var schematic in schematics)
+foreach(var currentSchematic in schematics)
 {
-    Console.WriteLine("Schematic:" + schematic.ScehmaticText + ", Line:" +schematic.LineNumber + ",X:" + schematic.X + ",Y:" + schematic.Y);
+    Console.WriteLine("Schematic:" + currentSchematic.ScehmaticText + ", Line:" +currentSchematic.LineNumber + ",X:" + currentSchematic.minX + ",Y:" + currentSchematic.minY);
+    for(int i= 0; i < currentSchematic.ScehmaticText.Length; i++)
+    {
+        foreach(var toMatch in schematics.Where(x=> x.IsSymbol == true && x.ScehmaticText != currentSchematic.ScehmaticText))
+        {
+            if(currentSchematic.minX - i  == toMatch.minX || currentSchematic.minY - i == toMatch.minY || currentSchematic.minX + i == toMatch.minX || currentSchematic.minY + i == toMatch.minY)
+            {
+                Console.WriteLine($"Schematic: {currentSchematic.ScehmaticText}, Adjacent to: {toMatch.ScehmaticText}");
+            }
+        }
+    }
 }
