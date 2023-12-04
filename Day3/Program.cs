@@ -53,6 +53,7 @@ foreach (var line in lines)
                     isSymbol = false,
                     ScehmaticText = scanned
                 };
+                schematics.Add(schematic);
             }
             scanned = "";
             scanned += character;
@@ -60,7 +61,7 @@ foreach (var line in lines)
             {
                 isSymbol = true,
                 ScehmaticText = scanned
-            };
+            };     
         }
     }
 }
