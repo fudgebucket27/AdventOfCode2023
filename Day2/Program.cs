@@ -9,9 +9,9 @@ foreach (var game in lines)
     Dictionary<string,int> gameAmounts = new Dictionary<string,int>();
     var amountOfColourSets = gameSets.Length;
     var validColourSets = 0;
-    foreach(var set in gameSets)
+    foreach(var gameSet in gameSets)
     {
-        string[] colours = set.Split(',');
+        string[] colours = gameSet.Split(',');
         foreach (var colour in colours)
         {
             var data = colour.Split(" ");
@@ -57,11 +57,10 @@ foreach (var game in lines)
             validColourSets++;
         }
         gameAmounts.Clear();
-    }
-
-    if(validColourSets == amountOfColourSets)
-    {
-        sum += gameId;
+        if (validColourSets == amountOfColourSets)
+        {
+            sum += gameId;
+        }
     }
 }
 Console.WriteLine(sum);
