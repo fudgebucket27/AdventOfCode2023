@@ -71,7 +71,7 @@ foreach (var line in lines)
             Console.WriteLine($"Updating card: {currentCard}, Count={cards[copyKey]}");
         }
 
-        if(i > 0)
+        if(cards.ContainsKey(copyKey))
         {
             cards[copyKey] += 1; // or 1, i
         }
