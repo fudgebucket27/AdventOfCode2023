@@ -5,10 +5,10 @@ var sum = 0;
 foreach (var game in lines)
 {
     int gameId = Int32.Parse(game.Split(':')[0].Split(' ')[1]);
-    string[] gameSets = game.Split(":")[1].Split(';');
-    Dictionary<string,int> gameAmounts = new Dictionary<string,int>();
-    var valid = true;
-    foreach (var gameSet in gameSets)
+    string[] gameColourSets = game.Split(":")[1].Split(';');
+    Dictionary<string,int> gameColourSetAmounts = new Dictionary<string,int>();
+    var isGameValid = true;
+    foreach (var gameSet in gameColourSets)
     {
         string[] colourSets = gameSet.Split(',');
         foreach (var colourSet in colourSets)
@@ -16,34 +16,34 @@ foreach (var game in lines)
             var data = colourSet.Split(" ");
             var dataAmount = Int32.Parse(data[1]);
             var colourName = data[2];
-            if (gameAmounts.ContainsKey(colourName))
+            if (gameColourSetAmounts.ContainsKey(colourName))
             {
-                gameAmounts[colourName] += dataAmount;
+                gameColourSetAmounts[colourName] += dataAmount;
             }
             else
             {
-                gameAmounts.Add(colourName, dataAmount);
+                gameColourSetAmounts.Add(colourName, dataAmount);
             }
         }
 
-        if (gameAmounts.ContainsKey("red") && gameAmounts["red"] > 12)
+        if (gameColourSetAmounts.ContainsKey("red") && gameColourSetAmounts["red"] > 12)
         {
-            valid = false;
+            isGameValid = false;
         }
 
-        if (gameAmounts.ContainsKey("green") && gameAmounts["green"] > 13)
+        if (gameColourSetAmounts.ContainsKey("green") && gameColourSetAmounts["green"] > 13)
         {
-            valid = false;
+            isGameValid = false;
         }
 
-        if (gameAmounts.ContainsKey("blue") && gameAmounts["blue"] > 14)
+        if (gameColourSetAmounts.ContainsKey("blue") && gameColourSetAmounts["blue"] > 14)
         {
-            valid = false;
+            isGameValid = false;
         }
-        gameAmounts.Clear();
+        gameColourSetAmounts.Clear();
     }
 
-    if (valid)
+    if (isGameValid)
     {
         sum += gameId;
     }
