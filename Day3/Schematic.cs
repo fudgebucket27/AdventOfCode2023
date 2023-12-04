@@ -17,6 +17,7 @@ namespace Day3
         public int southwest { get; set; }
         public int southeast { get; set; }
         public int northwest { get; set; }
-        public int northeast { get; set; }     
+        public int northeast { get; set; } 
+        public int LineNumber { get; set; }
     }
 }

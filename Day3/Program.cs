@@ -12,11 +12,13 @@ int southwest = 0;
 int southeast = 0;
 int northwest = 0;
 int northeast = 0;
+
+int lineCount = 0;
 foreach (var line in lines)
 {
+    lineCount++;
     string scanned = "";
     Schematic? schematic = null;
-
     foreach (var character in line)
     {
         if(character == '.')
@@ -35,6 +37,7 @@ foreach (var line in lines)
                 scanned += character;
                 schematic = new Schematic()
                 {
+                    LineNumber = lineCount,
                     isSymbol = false,
                     ScehmaticText = scanned
                 };
@@ -50,6 +53,7 @@ foreach (var line in lines)
             {
                 schematic = new Schematic()
                 {
+                    LineNumber = lineCount,
                     isSymbol = false,
                     ScehmaticText = scanned
                 };
@@ -59,6 +63,7 @@ foreach (var line in lines)
             scanned += character;
             schematic = new Schematic()
             {
+                LineNumber = lineCount,
                 isSymbol = true,
                 ScehmaticText = scanned
             };     
@@ -68,5 +73,5 @@ foreach (var line in lines)
 
 foreach(var schematic in schematics)
 {
-    Console.WriteLine(schematic.ScehmaticText);
+    Console.WriteLine("Schematic:" + schematic.ScehmaticText + ", Line:" +schematic.LineNumber);
 }
