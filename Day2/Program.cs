@@ -2,12 +2,14 @@
 
 var lines = File.ReadAllLines("input.txt");
 var sum = 0;
-foreach (var line in lines)
+foreach (var game in lines)
 {
-    int gameId = Int32.Parse(line.Split(':')[0].Split(' ')[1]);
-    string[] sets = line.Split(":")[1].Split(';');
-    Dictionary<string,int> colourAmounts = new Dictionary<string,int>();
-    foreach(var set in sets)
+    int gameId = Int32.Parse(game.Split(':')[0].Split(' ')[1]);
+    string[] gameSets = game.Split(":")[1].Split(';');
+    Dictionary<string,int> gameAmounts = new Dictionary<string,int>();
+    var amountOfColourSets = gameSets.Length;
+    var validColourSets = 0;
+    foreach(var set in gameSets)
     {
         string[] colours = set.Split(',');
         foreach (var colour in colours)
@@ -15,43 +17,49 @@ foreach (var line in lines)
             var data = colour.Split(" ");
             var dataAmount = Int32.Parse(data[1]);
             var colourName = data[2];
-            if (colourAmounts.ContainsKey(colourName))
+            if (gameAmounts.ContainsKey(colourName))
             {
-                colourAmounts[colourName] += dataAmount;
+                gameAmounts[colourName] += dataAmount;
             }
             else
             {
-                colourAmounts.Add(colourName, dataAmount);
+                gameAmounts.Add(colourName, dataAmount);
             }
         }
-    }
 
-    var valid = 0;
-    if(colourAmounts.ContainsKey("red"))
-    {
-        if (colourAmounts["red"] <= 12)
+        var valid = 0;
+        if (gameAmounts.ContainsKey("red"))
         {
-            valid++;
+            if (gameAmounts["red"] <= 12)
+            {
+                valid++;
+            }
         }
-    }
 
-    if (colourAmounts.ContainsKey("green"))
-    {
-        if (colourAmounts["green"] <= 13)
+        if (gameAmounts.ContainsKey("green"))
         {
-            valid++;
+            if (gameAmounts["green"] <= 13)
+            {
+                valid++;
+            }
         }
-    }
 
-    if (colourAmounts.ContainsKey("blue"))
-    {
-        if (colourAmounts["blue"] <= 14)
+        if (gameAmounts.ContainsKey("blue"))
         {
-            valid++;
+            if (gameAmounts["blue"] <= 14)
+            {
+                valid++;
+            }
         }
+
+        if (valid == 3)
+        {
+            validColourSets++;
+        }
+        gameAmounts.Clear();
     }
 
-    if(valid == 3)
+    if(validColourSets == amountOfColourSets)
     {
         sum += gameId;
     }
