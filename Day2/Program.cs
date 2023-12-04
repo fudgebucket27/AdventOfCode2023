@@ -7,14 +7,13 @@ foreach (var game in lines)
     int gameId = Int32.Parse(game.Split(':')[0].Split(' ')[1]);
     string[] gameSets = game.Split(":")[1].Split(';');
     Dictionary<string,int> gameAmounts = new Dictionary<string,int>();
-    var amountOfColourSets = gameSets.Length;
-    var validColourSets = 0;
-    foreach(var gameSet in gameSets)
+    var valid = true;
+    foreach (var gameSet in gameSets)
     {
-        string[] colours = gameSet.Split(',');
-        foreach (var colour in colours)
+        string[] colourSets = gameSet.Split(',');
+        foreach (var colourSet in colourSets)
         {
-            var data = colour.Split(" ");
+            var data = colourSet.Split(" ");
             var dataAmount = Int32.Parse(data[1]);
             var colourName = data[2];
             if (gameAmounts.ContainsKey(colourName))
@@ -27,40 +26,26 @@ foreach (var game in lines)
             }
         }
 
-        var valid = 0;
-        if (gameAmounts.ContainsKey("red"))
+        if (gameAmounts.ContainsKey("red") && gameAmounts["red"] > 12)
         {
-            if (gameAmounts["red"] <= 12)
-            {
-                valid++;
-            }
+            valid = false;
         }
 
-        if (gameAmounts.ContainsKey("green"))
+        if (gameAmounts.ContainsKey("green") && gameAmounts["green"] > 13)
         {
-            if (gameAmounts["green"] <= 13)
-            {
-                valid++;
-            }
+            valid = false;
         }
 
-        if (gameAmounts.ContainsKey("blue"))
+        if (gameAmounts.ContainsKey("blue") && gameAmounts["blue"] > 14)
         {
-            if (gameAmounts["blue"] <= 14)
-            {
-                valid++;
-            }
-        }
-
-        if (valid == 3)
-        {
-            validColourSets++;
+            valid = false;
         }
         gameAmounts.Clear();
-        if (validColourSets == amountOfColourSets)
-        {
-            sum += gameId;
-        }
+    }
+
+    if (valid)
+    {
+        sum += gameId;
     }
 }
 Console.WriteLine(sum);
