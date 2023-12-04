@@ -8,15 +8,15 @@ namespace Day3
 {
     public class Schematic
     {
-        int Number { get; set; }
-        bool isSymbol { get; set; } = false;
-        int west { get; set; }
-        int east { get; set; }  
-        int south { get; set; }
-        int north { get; set; }
-        int southwest { get; set; }
-        int southeast { get; set; }
-        int northwest { get; set; }
-        int northeast { get; set; }     
+        public string ScehmaticText { get; set; }
+        public bool isSymbol { get; set; } = false;
+        public int west { get; set; }
+        public int east { get; set; }
+        public int south { get; set; }
+        public int north { get; set; }
+        public int southwest { get; set; }
+        public int southeast { get; set; }
+        public int northwest { get; set; }
+        public int northeast { get; set; }     
     }
 }
