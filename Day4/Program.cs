@@ -52,13 +52,10 @@ foreach (var line in lines)
         }
     }
 
-    if(matches == 0) //if no matches count original 
-    {
-        matches = 1;
-    }
+    matches += 1;
 
     Console.WriteLine($"Card {cardNumber} Results: ");
-    for (int i = 0; i <= matches; i++)
+    for (int i = 0; i < matches; i++)
     {
         int currentCard = cardNumber + i;
 
@@ -70,7 +67,7 @@ foreach (var line in lines)
         else
         {
             cards[currentCard] += 1; // or increment by 1, depending on your requirements
-            Console.WriteLine($"Updating card: {currentCard}");
+            Console.WriteLine($"Updating card: {currentCard}, Count={cards[cardNumber]}");
         }
     }
 }
