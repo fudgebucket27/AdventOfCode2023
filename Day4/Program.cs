@@ -3,7 +3,7 @@ using System.Runtime.InteropServices.JavaScript;
 
 var lines = File.ReadAllLines("input.txt");
 
-//part 1
+Part 1
 double points = 0;
 foreach (var line in lines)
 {
@@ -32,94 +32,49 @@ foreach (var line in lines)
 }
 Console.WriteLine(points);
 
-points = 0;
-var cardNumber = 0;
-Dictionary<int, int> cards = new Dictionary<int, int>();
+//Part 2
+Dictionary<int, int> cardCounts = new Dictionary<int, int>();
+Queue<int> cardsToProcess = new Queue<int>();
+
+int count = 0;
 foreach (var line in lines)
 {
-    cardNumber++;
-    var matches = 0;
-    var game = line.Split(':')[1].Split('|');
-    var winningNumbers = game[0].Trim().Split(' ').Where(x => !string.IsNullOrEmpty(x)).ToList();
-    var numbersTocheck = game[1].Trim().Split(' ').Where(x => !string.IsNullOrEmpty(x)).ToList();
-
-    foreach (var number in numbersTocheck)
-    {
-        foreach (var winningNumber in winningNumbers)
-        {
-            if (winningNumber == number)
-            {
-                matches += 1;
-            }
-        }
-    }
-
-    matches += 1;
-
-    var key = cardNumber;
-    if (!cards.ContainsKey(key))
-    {
-        cards.Add(key, 1); // or 1, if you want to count the card itself regardless of matches
-
-    }
-    else
-    {
-        cards[key] += 1;
-    }
-    Console.WriteLine($"Adding original card: {cardNumber}");
-
-    Console.WriteLine($"Card {cardNumber} Results: ");
-
-    if (cardNumber == 1)
-    {
-        for (int i = 1; i < matches; i++)
-        {
-            int currentCard = cardNumber + i;
-
-            var currentKey = currentCard;
-
-
-            if (!cards.ContainsKey(currentKey))
-            {
-                cards.Add(currentKey, 1); // or 1, if you want to count the card itself regardless of matches
-                Console.WriteLine($"Copying card: {currentCard}, Count={cards[currentKey]}");
-            }
-            else if (cards.ContainsKey(currentKey))
-            {
-                cards[currentKey] += cards[currentKey]; // or 1, i
-                Console.WriteLine($"Copying card: {currentCard}, Count={cards[currentKey]}");
-            }
-        }
-    }
-    else
-    {
-        foreach(var card in cards.Where(x=> x.Key == cardNumber))
-        {
-            for (int i = 1; i < matches; i++)
-            {
-                int currentCard = cardNumber + i;
-
-                var currentKey = currentCard;
-
-
-                if (!cards.ContainsKey(currentKey))
-                {
-                    cards.Add(currentKey, 1); // or 1, if you want to count the card itself regardless of matches
-                    Console.WriteLine($"Copying card: {currentCard}, Count={cards[currentKey]}");
-                }
-                else if (cards.ContainsKey(currentKey))
-                {
-                    cards[currentKey] += matches; // or 1, i
-                    Console.WriteLine($"Copying card: {currentCard}, Count={cards[currentKey]}");
-                }
-            }
-        }
-    }
-
+    count++;
+    var parts = line.Split(':');
+    int cardNumber = count;
+    cardCounts[cardNumber] = 1; // Each card starts with one count
+    cardsToProcess.Enqueue(cardNumber);
 }
-foreach (var card in cards)
+
+while (cardsToProcess.Count > 0)
 {
-    Console.WriteLine($"Cards: {card.Key}, Count: {card.Value}");
+    int cardNumber = cardsToProcess.Dequeue();
+    var line = lines[cardNumber - 1]; // Assuming card numbers start from 1
+    var game = line.Split(':')[1].Split('|');
+    var winningNumbers = new HashSet<string>(game[0].Trim().Split(' ').Where(x => !string.IsNullOrEmpty(x)));
+    var numbersToCheck = game[1].Trim().Split(' ').Where(x => !string.IsNullOrEmpty(x));
+
+    int matches = numbersToCheck.Count(number => winningNumbers.Contains(number));
+
+    for (int i = 1; i <= matches; i++)
+    {
+        int nextCard = cardNumber + i;
+        if (nextCard <= lines.Count()) // Ensure we don't go past the last card
+        {
+            if (!cardCounts.ContainsKey(nextCard))
+            {
+                cardCounts[nextCard] = 1;
+            }
+            else
+            {
+                cardCounts[nextCard]++;
+            }
+
+            cardsToProcess.Enqueue(nextCard);
+        }
+    }
 }
 
-Console.WriteLine("Sum:" + cards.Sum(x => x.Value));
+int totalCards = cardCounts.Values.Sum();
+Console.WriteLine($"Total number of scratchcards: {totalCards}");
+
