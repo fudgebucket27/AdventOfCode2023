@@ -17,14 +17,18 @@ class Program
         string input = File.ReadAllText("input.txt");
 
         var maps = ExtractMaps(input);
-        foreach (var map in maps)
+
+        foreach (var seed in seeds)
         {
-            Console.WriteLine($"{map.Key}:");
-            foreach (var line in map.Value)
+            foreach (var map in maps)
             {
-                Console.WriteLine(string.Join(" ", line));
+                Console.WriteLine($"{map.Key}:");
+                var destinationRangeStart = map.Value[0];
+                var sourceRangeStart = map.Value[1];
+                var sourceRangeLength = map.Value[2];
+
+                Console.WriteLine();
             }
-            Console.WriteLine();
         }
     }
 
