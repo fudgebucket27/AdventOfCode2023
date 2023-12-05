@@ -25,9 +25,16 @@ class Program
             foreach (var map in maps)
             {
                 Console.WriteLine($"{map.Key}:");
-                var destinationRangeStart = map.Value[0];
-                var sourceRangeStart = map.Value[1];
-                var sourceRangeLength = map.Value[2];
+                var destinationRangeStart = map.Value[0][0];
+                var sourceRangeStart = map.Value[0][1];
+                var sourceRangeLength = map.Value[0][2];
+
+                int count = 0;
+                for(int i = sourceRangeStart; i <= sourceRangeStart + sourceRangeLength; i++)
+                {
+
+                    count++;
+                }
 
                 Console.WriteLine();
             }
