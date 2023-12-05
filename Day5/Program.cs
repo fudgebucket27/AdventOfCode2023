@@ -18,6 +18,7 @@ class Program
 
         var maps = ExtractMaps(input);
 
+        List<int> result = new List<int>();
         foreach (var seed in seeds)
         {
             foreach (var map in maps)
