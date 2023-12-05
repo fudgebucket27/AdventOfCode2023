@@ -33,8 +33,7 @@ Console.WriteLine(points);
 
 points = 0;
 var cardNumber = 0;
-Dictionary<string,int> originals = new Dictionary<string,int>();
-Dictionary<string, int> copies = new Dictionary<string, int>();
+Dictionary<int,int> cards = new Dictionary<int,int>();
 foreach (var line in lines)
 {
     cardNumber++;
@@ -54,10 +53,12 @@ foreach (var line in lines)
         }
     }
     
-    var originalKey = "O:" + cardNumber;
-    if (!originals.ContainsKey(originalKey))
+    matches += 1;
+
+    var key = cardNumber;
+    if (!cards.ContainsKey(key))
     {
-        originals.Add(originalKey, 1); // or 1, if you want to count the card itself regardless of matches
+        cards.Add(key, 1); // or 1, if you want to count the card itself regardless of matches
         Console.WriteLine($"Adding original card: {cardNumber}");
     }
 
@@ -66,27 +67,23 @@ foreach (var line in lines)
     {
         int currentCard = cardNumber + i;
         
-        var copyKey = "C:" + currentCard;
+        var currentKey = currentCard;
 
-        if (!copies.ContainsKey(copyKey) && cardNumber != 1)
+        if (!cards.ContainsKey(currentKey) && i != 0)
         {
-            copies.Add(copyKey, 1); // or 1, if you want to count the card itself regardless of matches
-            Console.WriteLine($"Copying card: {currentCard}, Count={copies[copyKey]}");
+            cards.Add(currentKey, 1); // or 1, if you want to count the card itself regardless of matches
+            Console.WriteLine($"Copying card: {currentCard}, Count={cards[currentKey]}");
         }
-        else if (copies.ContainsKey(copyKey))
+        else if (cards.ContainsKey(currentKey) && i != 0)
         {
-            copies[copyKey] += 1; // or 1, i
-            Console.WriteLine($"Copying card: {currentCard}, Count={copies[copyKey]}");
+            cards[currentKey] += 1; // or 1, i
+            Console.WriteLine($"Copying card: {currentCard}, Count={cards[currentKey]}");
         }
     }
 }
-foreach(var card in originals)
+foreach(var card in cards)
 {
-    Console.WriteLine($"Card Originals: {card.Key}, Count: {card.Value}");
+    Console.WriteLine($"Cards: {card.Key}, Count: {card.Value}");
 }
 
-foreach (var card in copies)
-{
-    Console.WriteLine($"Card Copies: {card.Key}, Count: {card.Value}");
-}
-Console.WriteLine("Sum:"+originals.Sum(x=> x.Value));
+Console.WriteLine("Sum:"+cards.Sum(x=> x.Value));
