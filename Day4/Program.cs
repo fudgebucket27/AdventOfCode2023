@@ -69,14 +69,16 @@ foreach (var line in lines)
     Console.WriteLine($"Adding original card: {cardNumber}");
 
     Console.WriteLine($"Card {cardNumber} Results: ");
-    for (int i = 1; i < matches; i++)
+
+    if (cardNumber == 1)
     {
-        int currentCard = cardNumber + i;
-
-        var currentKey = currentCard;
-
-        if (cardNumber == 1)
+        for (int i = 1; i < matches; i++)
         {
+            int currentCard = cardNumber + i;
+
+            var currentKey = currentCard;
+
+
             if (!cards.ContainsKey(currentKey))
             {
                 cards.Add(currentKey, 1); // or 1, if you want to count the card itself regardless of matches
@@ -88,22 +90,32 @@ foreach (var line in lines)
                 Console.WriteLine($"Copying card: {currentCard}, Count={cards[currentKey]}");
             }
         }
-        else
+    }
+    else
+    {
+        foreach(var card in cards.Where(x=> x.Key == cardNumber))
         {
+            for (int i = 1; i < matches; i++)
+            {
+                int currentCard = cardNumber + i;
 
-            if (!cards.ContainsKey(currentKey))
-            {
-                cards.Add(currentKey, 1); // or 1, if you want to count the card itself regardless of matches
-                Console.WriteLine($"Copying card 1: {currentCard}, Count={cards[currentKey]}");
-            }
-            else if (cards.ContainsKey(currentKey))
-            {
-                int currentCount = cards[currentKey];
-                cards[currentKey] += currentCount; // or 1, i
-                Console.WriteLine($"Copying card 2: {currentCard}, Count={cards[currentKey]}");
+                var currentKey = currentCard;
+
+
+                if (!cards.ContainsKey(currentKey))
+                {
+                    cards.Add(currentKey, 1); // or 1, if you want to count the card itself regardless of matches
+                    Console.WriteLine($"Copying card: {currentCard}, Count={cards[currentKey]}");
+                }
+                else if (cards.ContainsKey(currentKey))
+                {
+                    cards[currentKey] += cards[currentKey] * matches; // or 1, i
+                    Console.WriteLine($"Copying card: {currentCard}, Count={cards[currentKey]}");
+                }
             }
         }
     }
+
 }
 foreach (var card in cards)
 {
