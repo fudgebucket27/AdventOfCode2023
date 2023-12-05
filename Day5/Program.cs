@@ -1,50 +1,67 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq; // Include for LINQ functionalities
 
-var seeds = ExtractSeeds(File.ReadLines("input.txt").First());
-Console.WriteLine("Seeds: " + string.Join(" ", seeds));
-
-var maps = ExtractMaps(File.ReadAllText("input.txt"));
-foreach (var map in maps)
+class Program
 {
-    Console.WriteLine($"{map.Key}:");
-    foreach (var line in map.Value)
+    static void Main()
     {
-        Console.WriteLine(line);
-    }
-    Console.WriteLine();
-}
+        // Read the first line of the file for seeds
+        string firstLine = File.ReadLines("input.txt").First();
+        var seeds = ExtractSeeds(firstLine);
+        Console.WriteLine("Seeds: " + string.Join(" ", seeds));
 
-static List<int> ExtractSeeds(string line)
-{
-    var match = Regex.Match(line, @"seeds:\s*(.*)");
-    if (match.Success)
-    {
-        return match.Groups[1].Value.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
-                     .Select(int.Parse).ToList();
-    }
-    return new List<int>();
-}
+        // Read the rest of the file for maps
+        string input = File.ReadAllText("input.txt");
 
-static Dictionary<string, List<string>> ExtractMaps(string input)
-{
-    var maps = new Dictionary<string, List<string>>();
-    var mapTitles = Regex.Matches(input, @"(\w+-to-\w+ map:)");
-
-    foreach (Match title in mapTitles)
-    {
-        string mapName = title.Groups[1].Value;
-        int startIndex = title.Index + title.Length;
-
-        int endIndex = input.Length;
-        if (title.NextMatch().Success)
+        var maps = ExtractMaps(input);
+        foreach (var map in maps)
         {
-            endIndex = title.NextMatch().Index;
+            Console.WriteLine($"{map.Key}:");
+            foreach (var line in map.Value)
+            {
+                Console.WriteLine(string.Join(" ", line));
+            }
+            Console.WriteLine();
+        }
+    }
+
+    static List<int> ExtractSeeds(string line)
+    {
+        var match = Regex.Match(line, @"seeds:\s*(.*)");
+        if (match.Success)
+        {
+            return match.Groups[1].Value.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
+                         .Select(int.Parse).ToList();
+        }
+        return new List<int>();
+    }
+
+    static Dictionary<string, List<List<int>>> ExtractMaps(string input)
+    {
+        var maps = new Dictionary<string, List<List<int>>>();
+        var mapTitles = Regex.Matches(input, @"(\w+-to-\w+ map:)");
+
+        foreach (Match title in mapTitles)
+        {
+            string mapName = title.Groups[1].Value;
+            int startIndex = title.Index + title.Length;
+
+            int endIndex = input.Length;
+            if (title.NextMatch().Success)
+            {
+                endIndex = title.NextMatch().Index;
+            }
+
+            string mapContent = input.Substring(startIndex, endIndex - startIndex);
+            var lines = mapContent.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries)
+                                  .Select(line => line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
+                                  .Select(int.Parse).ToList()).ToList();
+            maps.Add(mapName, lines);
         }
 
-        string mapContent = input.Substring(startIndex, endIndex - startIndex);
-        var lines = new List<string>(mapContent.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries));
-        maps.Add(mapName, lines);
+        return maps;
     }
-
-    return maps;
 }
