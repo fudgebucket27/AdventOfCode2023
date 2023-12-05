@@ -109,7 +109,7 @@ foreach (var line in lines)
                 }
                 else if (cards.ContainsKey(currentKey))
                 {
-                    cards[currentKey] += cards[currentKey] * matches; // or 1, i
+                    cards[currentKey] += matches; // or 1, i
                     Console.WriteLine($"Copying card: {currentCard}, Count={cards[currentKey]}");
                 }
             }
