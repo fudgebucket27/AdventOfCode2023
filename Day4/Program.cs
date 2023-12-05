@@ -1,4 +1,5 @@
 ﻿using System.Runtime.ExceptionServices;
+using System.Runtime.InteropServices.JavaScript;
 
 var lines = File.ReadAllLines("input.txt");
 
@@ -74,15 +75,34 @@ foreach (var line in lines)
         
         var currentKey = currentCard;
 
-        if (!cards.ContainsKey(currentKey))
+        if(cardNumber == 1) 
         {
-            cards.Add(currentKey, 1); // or 1, if you want to count the card itself regardless of matches
-            Console.WriteLine($"Copying card: {currentCard}, Count={cards[currentKey]}");
+            if (!cards.ContainsKey(currentKey))
+            {
+                cards.Add(currentKey, 1); // or 1, if you want to count the card itself regardless of matches
+                Console.WriteLine($"Copying card: {currentCard}, Count={cards[currentKey]}");
+            }
+            else if (cards.ContainsKey(currentKey))
+            {
+                cards[currentKey] += cards[currentKey]; // or 1, i
+                Console.WriteLine($"Copying card: {currentCard}, Count={cards[currentKey]}");
+            }
         }
-        else if (cards.ContainsKey(currentKey))
+        else
         {
-            cards[currentKey] += 1; // or 1, i
-            Console.WriteLine($"Copying card: {currentCard}, Count={cards[currentKey]}");
+            for(int j = 1; j < matches; j++) 
+            {
+                if (!cards.ContainsKey(currentKey))
+                {
+                    cards.Add(currentKey, 1); // or 1, if you want to count the card itself regardless of matches
+                    Console.WriteLine($"Copying card: {currentCard}, Count={cards[currentKey]}");
+                }
+                else if (cards.ContainsKey(currentKey))
+                {
+                    cards[currentKey] += 1; // or 1, i
+                    Console.WriteLine($"Copying card: {currentCard}, Count={cards[currentKey]}");
+                }
+            }
         }
     }
 }
