@@ -21,6 +21,7 @@ class Program
         List<int> result = new List<int>();
         foreach (var seed in seeds)
         {
+            int conversionResult = -1;
             foreach (var map in maps)
             {
                 Console.WriteLine($"{map.Key}:");
