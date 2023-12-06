@@ -18,13 +18,13 @@ class Program
 
         var maps = ExtractMaps(input);
 
-        List<int> result = new List<int>();
+        List<long> result = new List<long>();
         foreach (var seed in seeds)
         {
-            int conversionResult = seed;
+            long conversionResult = seed;
             foreach (var map in maps)
             {
-                Console.WriteLine($"{map.Key}: Conversion: {conversionResult}");
+                //Console.WriteLine($"{map.Key}: Start Conversion: {conversionResult}");
                 foreach(var line in map.Value)
                 {
                     var destinationRangeStart = line[0];
@@ -32,21 +32,21 @@ class Program
                     var sourceRangeLength = line[2];
 
                     int count = 0;
-                    for (int i = sourceRangeStart; i <= sourceRangeStart + sourceRangeLength; i++)
+                    for (long i = sourceRangeStart; i <= sourceRangeStart + sourceRangeLength; i++)
                     {
                         if (i == conversionResult)
                         {
                             conversionResult = destinationRangeStart + count;
-                            break;
+                            goto EndOfLoop;
                         }
                         count++;
                     }
-
+                    //Console.WriteLine($"Interim Conversion: {conversionResult}");
                 }
-
-                Console.WriteLine();
+            EndOfLoop:
+                var blank = 0;
             }
-            Console.WriteLine($"Conversion: {conversionResult}");
+            //Console.WriteLine($"Final Conversion: {conversionResult}");
             result.Add(conversionResult);
         }
         Console.WriteLine($"Lowest Location number: {result.Min()}");
@@ -63,9 +63,9 @@ class Program
         return new List<int>();
     }
 
-    static Dictionary<string, List<List<int>>> ExtractMaps(string input)
+    static Dictionary<string, List<List<long>>> ExtractMaps(string input)
     {
-        var maps = new Dictionary<string, List<List<int>>>();
+        var maps = new Dictionary<string, List<List<long>>>();
         var mapTitles = Regex.Matches(input, @"(\w+-to-\w+ map:)");
 
         foreach (Match title in mapTitles)
@@ -82,7 +82,7 @@ class Program
             string mapContent = input.Substring(startIndex, endIndex - startIndex);
             var lines = mapContent.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries)
                                   .Select(line => line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
-                                  .Select(int.Parse).ToList()).ToList();
+                                  .Select(long.Parse).ToList()).ToList();
             maps.Add(mapName, lines);
         }
 
