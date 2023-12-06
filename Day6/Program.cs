@@ -7,7 +7,6 @@ var finalResults = new Dictionary<long, List<long>>();//
 int count = 0;
 foreach (var time in times)
 {
-    Console.WriteLine("Time:" + time);
     List<long> results = new List<long>();
     for (long i = 0; i <= time; i++)
     {
@@ -16,7 +15,6 @@ foreach (var time in times)
         long remainingTime = time - i;
         distance = i * remainingTime;
         results.Add(distance);
-        //Console.WriteLine(distance);
     }
     finalResults.Add(count, results);
     count++;
@@ -38,7 +36,6 @@ var part2FinalResults = new Dictionary<long, List<long>>();//
 int part2Count = 0;
 foreach (var time in part2Times)
 {
-    Console.WriteLine("Time:" + time);
     List<long> results = new List<long>();
     for (long i = 0; i <= time; i++)
     {
@@ -47,7 +44,6 @@ foreach (var time in part2Times)
         long remainingTime = time - i;
         distance = i * remainingTime;
         results.Add(distance);
-        //Console.WriteLine(distance);
     }
     part2FinalResults.Add(part2Count, results);
     part2Count++;
