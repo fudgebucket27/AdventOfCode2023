@@ -30,7 +30,7 @@ Console.WriteLine(waysToWin.Aggregate((a, x) => a * x));
 
 //Part 2
 var part2Times = new List<long> { 55826490 };
-var part1Times = new List<long> { 246144110121111 };
+var part2Distances = new List<long> { 246144110121111 };
 
 var part2FinalResults = new Dictionary<long, List<long>>();//
 int part2Count = 0;
@@ -50,9 +50,9 @@ foreach (var time in part2Times)
 }
 
 var part2WaysToWin = new List<long>();
-for (int i = 0; i < part1Times.Count; i++)
+for (int i = 0; i < part2Distances.Count; i++)
 {
-    var wins = part2FinalResults[i].Where(x => x > part1Times[i]).Count();
+    var wins = part2FinalResults[i].Where(x => x > part2Distances[i]).Count();
     part2WaysToWin.Add(wins);
 }
 Console.WriteLine(part2WaysToWin.Aggregate((a, x) => a * x));
