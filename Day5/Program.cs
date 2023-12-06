@@ -43,39 +43,53 @@ class Program
 
 
         //Part 2
-        Dictionary<string, SortedSet<Range>> efficientMaps = new Dictionary<string, SortedSet<Range>>();
-        foreach (var mapEntry in maps)
-        {
-            var sortedRanges = new SortedSet<Range>(new RangeComparer());
-            foreach (var line in mapEntry.Value)
-            {
-                sortedRanges.Add(new Range(line[1], line[1] + line[2], line[0]));
-            }
-            efficientMaps.Add(mapEntry.Key, sortedRanges);
-        }
+        var seedRanges = ExtractSeedsRanges(firstLine);
         List<long> part2Result = new List<long>();
-        for (int i = 0; i < seeds.Count; i += 2)
+        // Process each range of seeds
+        foreach (var range in seedRanges)
         {
-            long startSeed = seeds[i];
-            long rangeLength = seeds[i + 1];
-
-            for (long seed = startSeed; seed < startSeed + rangeLength; seed++)
+            for (long seed = range.Item1; seed < range.Item1 + range.Item2; seed++)
             {
                 long conversionResult = seed;
-                foreach (var map in efficientMaps)
+                foreach (var map in maps)
                 {
-                    var range = map.Value.FirstOrDefault(r => r.Contains(conversionResult));
-                    if (range != null)
+                    foreach (var line in map.Value)
                     {
-                        conversionResult = range.DestinationStart + (conversionResult - range.Start);
-                        break;
+                        var destinationRangeStart = line[0];
+                        var sourceRangeStart = line[1];
+                        var sourceRangeLength = line[2];
+                        var sourceRangeEnd = sourceRangeStart + sourceRangeLength;
+
+                        if (conversionResult >= sourceRangeStart && conversionResult <= sourceRangeEnd)
+                        {
+                            conversionResult = destinationRangeStart + (conversionResult - sourceRangeStart);
+                            break;
+                        }
                     }
                 }
-                part2Result.Add(conversionResult);
+                part1Result.Add(conversionResult);
             }
         }
         Console.WriteLine($"Part 2: Lowest Location number: {part2Result.Min()}");
 
+    }
+
+    static List<Tuple<long, long>> ExtractSeedsRanges(string line)
+    {
+        var match = Regex.Match(line, @"seeds:\s*(.*)");
+        var seedRanges = new List<Tuple<long, long>>();
+
+        if (match.Success)
+        {
+            var parts = match.Groups[1].Value.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 0; i < parts.Length; i += 2)
+            {
+                long start = long.Parse(parts[i]);
+                long length = long.Parse(parts[i + 1]);
+                seedRanges.Add(Tuple.Create(start, length));
+            }
+        }
+        return seedRanges;
     }
 
     static List<long> ExtractSeeds(string line)
