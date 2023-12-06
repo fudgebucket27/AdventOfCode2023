@@ -24,29 +24,26 @@ class Program
             long conversionResult = seed;
             foreach (var map in maps)
             {
-                //Console.WriteLine($"{map.Key}: Start Conversion: {conversionResult}");
-                foreach(var line in map.Value)
+                Console.WriteLine($"{map.Key}: Start Conversion: {conversionResult}");
+                foreach (var line in map.Value)
                 {
                     var destinationRangeStart = line[0];
                     var sourceRangeStart = line[1];
                     var sourceRangeLength = line[2];
+                    var sourceRangeEnd = sourceRangeStart + sourceRangeLength;
 
-                    int count = 0;
-                    for (long i = sourceRangeStart; i <= sourceRangeStart + sourceRangeLength; i++)
+                    if (conversionResult >= sourceRangeStart && conversionResult <= sourceRangeEnd)
                     {
-                        if (i == conversionResult)
-                        {
-                            conversionResult = destinationRangeStart + count;
-                            goto EndOfLoop;
-                        }
-                        count++;
+                        // Calculate the new conversionResult based on the offset within the source range
+                        conversionResult = destinationRangeStart + (conversionResult - sourceRangeStart);
+                        break;  // Break out of the inner loop as match is found
                     }
-                    //Console.WriteLine($"Interim Conversion: {conversionResult}");
+
+                    Console.WriteLine($"Interim Conversion: {conversionResult}");
                 }
-            EndOfLoop:
-                var blank = 0;
+                Console.WriteLine();
             }
-            //Console.WriteLine($"Final Conversion: {conversionResult}");
+            Console.WriteLine($"Final Conversion: {conversionResult}");
             result.Add(conversionResult);
         }
         Console.WriteLine($"Lowest Location number: {result.Min()}");
