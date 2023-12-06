@@ -21,24 +21,35 @@ class Program
         List<int> result = new List<int>();
         foreach (var seed in seeds)
         {
-            int conversionResult = -1;
+            int conversionResult = seed;
             foreach (var map in maps)
             {
-                Console.WriteLine($"{map.Key}:");
-                var destinationRangeStart = map.Value[0][0];
-                var sourceRangeStart = map.Value[0][1];
-                var sourceRangeLength = map.Value[0][2];
-
-                int count = 0;
-                for(int i = sourceRangeStart; i <= sourceRangeStart + sourceRangeLength; i++)
+                Console.WriteLine($"{map.Key}: Conversion: {conversionResult}");
+                foreach(var line in map.Value)
                 {
+                    var destinationRangeStart = line[0];
+                    var sourceRangeStart = line[1];
+                    var sourceRangeLength = line[2];
 
-                    count++;
+                    int count = 0;
+                    for (int i = sourceRangeStart; i <= sourceRangeStart + sourceRangeLength; i++)
+                    {
+                        if (i == conversionResult)
+                        {
+                            conversionResult = destinationRangeStart + count;
+                            break;
+                        }
+                        count++;
+                    }
+
                 }
 
                 Console.WriteLine();
             }
+            Console.WriteLine($"Conversion: {conversionResult}");
+            result.Add(conversionResult);
         }
+        Console.WriteLine($"Lowest Location number: {result.Min()}");
     }
 
     static List<int> ExtractSeeds(string line)
