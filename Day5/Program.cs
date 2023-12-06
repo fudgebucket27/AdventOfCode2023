@@ -8,23 +8,21 @@ class Program
 {
     static void Main()
     {
-        // Read the first line of the file for seeds
+        
         string firstLine = File.ReadLines("input.txt").First();
         var seeds = ExtractSeeds(firstLine);
-        Console.WriteLine("Seeds: " + string.Join(" ", seeds));
+    
 
-        // Read the rest of the file for maps
         string input = File.ReadAllText("input.txt");
-
         var maps = ExtractMaps(input);
 
+        //Part 1
         List<long> result = new List<long>();
         foreach (var seed in seeds)
         {
             long conversionResult = seed;
             foreach (var map in maps)
             {
-                Console.WriteLine($"{map.Key}: Start Conversion: {conversionResult}");
                 foreach (var line in map.Value)
                 {
                     var destinationRangeStart = line[0];
@@ -34,16 +32,11 @@ class Program
 
                     if (conversionResult >= sourceRangeStart && conversionResult <= sourceRangeEnd)
                     {
-                        // Calculate the new conversionResult based on the offset within the source range
                         conversionResult = destinationRangeStart + (conversionResult - sourceRangeStart);
                         break;  // Break out of the inner loop as match is found
                     }
-
-                    Console.WriteLine($"Interim Conversion: {conversionResult}");
                 }
-                Console.WriteLine();
             }
-            Console.WriteLine($"Final Conversion: {conversionResult}");
             result.Add(conversionResult);
         }
         Console.WriteLine($"Lowest Location number: {result.Min()}");
