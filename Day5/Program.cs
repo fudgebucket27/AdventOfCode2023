@@ -52,11 +52,13 @@ class Program
 
         foreach (var (start, length) in seedRanges)
         {
-            for (long i = 0; i < length; i++)
+            long i = start;
+            while (i < start + length)
             {
-                long seed = start + i;
-                long location = MapSeedToLocation(seed, parsedmaps);
+                long stop = CalculateStop(i, parsedmaps);
+                long location = MapSeedToLocation(i, parsedmaps);
                 minLocation = Math.Min(minLocation, location);
+                i += stop;
             }
         }
 
@@ -64,6 +66,35 @@ class Program
 
 
     }
+
+    static long CalculateStop(long seed, List<Dictionary<long, (long destStart, long srcStart, long rangeLength)>> maps)
+    {
+        long stop = long.MaxValue;
+
+        foreach (var map in maps)
+        {
+            long localStop = long.MaxValue;
+            foreach (var entry in map)
+            {
+                var (destStart, srcStart, rangeLength) = entry.Value;
+                if (seed >= srcStart && seed < srcStart + rangeLength)
+                {
+                    localStop = rangeLength - (seed - srcStart);
+                    break;
+                }
+                else if (srcStart > seed)
+                {
+                    localStop = srcStart - seed;
+                    break;
+                }
+            }
+
+            stop = Math.Min(stop, localStop);
+        }
+
+        return stop;
+    }
+
 
     static List<(long start, long length)> ParseSeedRanges(string line)
     {
@@ -76,10 +107,11 @@ class Program
         return ranges;
     }
 
-    static List<Dictionary<long, List<(long destStart, long rangeLength)>>> ParseMaps(string[] lines)
+    // Adjusted to return the correct type for maps
+    static List<Dictionary<long, (long destStart, long srcStart, long rangeLength)>> ParseMaps(string[] lines)
     {
-        var maps = new List<Dictionary<long, List<(long destStart, long rangeLength)>>>();
-        Dictionary<long, List<(long, long)>> currentMap = null;
+        var maps = new List<Dictionary<long, (long destStart, long srcStart, long rangeLength)>>();
+        Dictionary<long, (long, long, long)> currentMap = null;
 
         foreach (var line in lines)
         {
@@ -94,20 +126,19 @@ class Program
                 {
                     maps.Add(currentMap);
                 }
-                currentMap = new Dictionary<long, List<(long, long)>>();
+                currentMap = new Dictionary<long, (long, long, long)>();
             }
             else
             {
                 var parts = line.Split(' ').Select(long.Parse).ToArray();
                 if (parts.Length == 4)
                 {
-                    for (long src = parts[1], dest = parts[0], count = 0; count < parts[3]; src++, dest++, count++)
+                    long destStart = parts[0];
+                    long srcStart = parts[1];
+                    long rangeLength = parts[3];
+                    for (long i = 0; i < rangeLength; i++)
                     {
-                        if (!currentMap.ContainsKey(src))
-                        {
-                            currentMap[src] = new List<(long, long)>();
-                        }
-                        currentMap[src].Add((dest, parts[3]));
+                        currentMap[srcStart + i] = (destStart + i, srcStart, rangeLength);
                     }
                 }
                 else
@@ -125,7 +156,8 @@ class Program
         return maps;
     }
 
-    static long MapSeedToLocation(long seed, List<Dictionary<long, List<(long destStart, long rangeLength)>>> maps)
+
+    static long MapSeedToLocation(long seed, List<Dictionary<long, (long destStart, long srcStart, long rangeLength)>> maps)
     {
         long currentNumber = seed;
 
@@ -137,16 +169,14 @@ class Program
         return currentNumber;
     }
 
-    static long MapNumber(long number, Dictionary<long, List<(long destStart, long rangeLength)>> map)
+    static long MapNumber(long number, Dictionary<long, (long destStart, long srcStart, long rangeLength)> map)
     {
-        if (map.TryGetValue(number, out var buckets))
+        if (map.TryGetValue(number, out var entry))
         {
-            foreach (var (destStart, rangeLength) in buckets)
+            var (destStart, srcStart, rangeLength) = entry;
+            if (number >= srcStart && number < srcStart + rangeLength)
             {
-                if (number < destStart + rangeLength)
-                {
-                    return destStart + (number - destStart);
-                }
+                return destStart + (number - srcStart);
             }
         }
 
