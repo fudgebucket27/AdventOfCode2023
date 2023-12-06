@@ -43,7 +43,6 @@ class Program
 
 
         //Part 2 DOESNT WORK GG
-        // Read the file (replace "path_to_file.txt" with the actual file path)
         string[] lines = File.ReadAllLines("input.txt");
         var seedRanges = ParseSeedRanges(lines[0]);
         var parsedmaps = ParseMaps(lines.Skip(1).ToArray());
