@@ -52,15 +52,15 @@ class Program
         Console.WriteLine($"Lowest Location number: {result.Min()}");
     }
 
-    static List<int> ExtractSeeds(string line)
+    static List<long> ExtractSeeds(string line)
     {
         var match = Regex.Match(line, @"seeds:\s*(.*)");
         if (match.Success)
         {
             return match.Groups[1].Value.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
-                         .Select(int.Parse).ToList();
+                         .Select(long.Parse).ToList();
         }
-        return new List<int>();
+        return new List<long>();
     }
 
     static Dictionary<string, List<List<long>>> ExtractMaps(string input)
