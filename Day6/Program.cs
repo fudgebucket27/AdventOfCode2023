@@ -65,7 +65,7 @@ sw2.Stop();
 Console.WriteLine($"Ways to win: {win2Amount}, Elapsed time: {sw2.ElapsedMilliseconds} ms");
 
 
-//Part 2 This is what CHAT GPT gave me to optimize the code LMAO
+//Part 2 This is what CHAT GPT gave me to optimize the code LMAO. Using parabolas. TIL
 Stopwatch sw3 = new Stopwatch();
 sw3.Start();
 
