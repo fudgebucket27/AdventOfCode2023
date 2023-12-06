@@ -106,7 +106,7 @@ class Program
                 else
                 {
                     // Handle error or invalid line format
-                    Console.WriteLine($"Invalid line format: {line}");
+                    //Console.WriteLine($"Invalid line format: {line}");
                 }
             }
         }
