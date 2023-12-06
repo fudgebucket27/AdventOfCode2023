@@ -17,7 +17,7 @@ class Program
         var maps = ExtractMaps(input);
 
         //Part 1
-        List<long> result = new List<long>();
+        List<long> part1Result = new List<long>();
         foreach (var seed in seeds)
         {
             long conversionResult = seed;
@@ -33,13 +33,46 @@ class Program
                     if (conversionResult >= sourceRangeStart && conversionResult <= sourceRangeEnd)
                     {
                         conversionResult = destinationRangeStart + (conversionResult - sourceRangeStart);
-                        break;  // Break out of the inner loop as match is found
+                        break; 
                     }
                 }
             }
-            result.Add(conversionResult);
+            part1Result.Add(conversionResult);
         }
-        Console.WriteLine($"Lowest Location number: {result.Min()}");
+        Console.WriteLine($"Part 1: Lowest Location number: {part1Result.Min()}");
+
+
+        //Part 2
+        List<long> part2Result = new List<long>();
+        for (int i = 0; i < seeds.Count; i += 2)
+        {
+            long startSeed = seeds[i];
+            long endSeed = seeds[i + 1];
+
+            for (long seed = startSeed; seed <= endSeed; seed++)
+            {
+                long conversionResult = seed;
+                foreach (var map in maps)
+                {
+                    foreach (var line in map.Value)
+                    {
+                        var destinationRangeStart = line[0];
+                        var sourceRangeStart = line[1];
+                        var sourceRangeLength = line[2];
+                        var sourceRangeEnd = sourceRangeStart + sourceRangeLength;
+
+                        if (conversionResult >= sourceRangeStart && conversionResult <= sourceRangeEnd)
+                        {
+                            conversionResult = destinationRangeStart + (conversionResult - sourceRangeStart);
+                            break; 
+                        }
+
+                    }
+                }
+                part2Result.Add(conversionResult);
+            }
+        }
+        Console.WriteLine($"Part 2: Lowest Location number: {part2Result.Min()}");
     }
 
     static List<long> ExtractSeeds(string line)

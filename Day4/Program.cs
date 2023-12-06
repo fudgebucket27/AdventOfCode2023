@@ -3,7 +3,7 @@ using System.Runtime.InteropServices.JavaScript;
 
 var lines = File.ReadAllLines("input.txt");
 
-Part 1
+//Part 1
 double points = 0;
 foreach (var line in lines)
 {
