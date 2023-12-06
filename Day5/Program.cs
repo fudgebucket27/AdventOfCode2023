@@ -76,10 +76,10 @@ class Program
         return ranges;
     }
 
-    static List<Dictionary<long, (long destStart, long srcStart, long rangeLength)>> ParseMaps(string[] lines)
+    static List<Dictionary<long, List<(long destStart, long rangeLength)>>> ParseMaps(string[] lines)
     {
-        var maps = new List<Dictionary<long, (long destStart, long srcStart, long rangeLength)>>();
-        Dictionary<long, (long, long, long)> currentMap = null;
+        var maps = new List<Dictionary<long, List<(long destStart, long rangeLength)>>>();
+        Dictionary<long, List<(long, long)>> currentMap = null;
 
         foreach (var line in lines)
         {
@@ -94,14 +94,21 @@ class Program
                 {
                     maps.Add(currentMap);
                 }
-                currentMap = new Dictionary<long, (long, long, long)>();
+                currentMap = new Dictionary<long, List<(long, long)>>();
             }
             else
             {
                 var parts = line.Split(' ').Select(long.Parse).ToArray();
-                if (parts.Length == 4) // Check if the line has exactly 4 parts
+                if (parts.Length == 4)
                 {
-                    currentMap[parts[0]] = (parts[1], parts[2], parts[3]);
+                    for (long src = parts[1], dest = parts[0], count = 0; count < parts[3]; src++, dest++, count++)
+                    {
+                        if (!currentMap.ContainsKey(src))
+                        {
+                            currentMap[src] = new List<(long, long)>();
+                        }
+                        currentMap[src].Add((dest, parts[3]));
+                    }
                 }
                 else
                 {
@@ -118,8 +125,7 @@ class Program
         return maps;
     }
 
-
-    static long MapSeedToLocation(long seed, List<Dictionary<long, (long destStart, long srcStart, long rangeLength)>> maps)
+    static long MapSeedToLocation(long seed, List<Dictionary<long, List<(long destStart, long rangeLength)>>> maps)
     {
         long currentNumber = seed;
 
@@ -131,15 +137,16 @@ class Program
         return currentNumber;
     }
 
-    static long MapNumber(long number, Dictionary<long, (long destStart, long srcStart, long rangeLength)> map)
+    static long MapNumber(long number, Dictionary<long, List<(long destStart, long rangeLength)>> map)
     {
-        foreach (var entry in map)
+        if (map.TryGetValue(number, out var buckets))
         {
-            var (destStart, srcStart, rangeLength) = entry.Value;
-
-            if (number >= srcStart && number < srcStart + rangeLength)
+            foreach (var (destStart, rangeLength) in buckets)
             {
-                return destStart + (number - srcStart);
+                if (number < destStart + rangeLength)
+                {
+                    return destStart + (number - destStart);
+                }
             }
         }
 
