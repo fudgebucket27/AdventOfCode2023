@@ -64,4 +64,5 @@ for (int i = 0; i < part2Distances.Count; i++)
     part2WaysToWin.Add(wins);
 }
 var win2Amount = part2WaysToWin.Aggregate((a, x) => a * x);
+sw2.Stop();
 Console.WriteLine($"Ways to win: {win2Amount}, Elapsed time: {sw2.ElapsedMilliseconds} ms");
