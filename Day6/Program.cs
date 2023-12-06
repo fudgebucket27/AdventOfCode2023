@@ -47,8 +47,7 @@ foreach (var time in part2Times)
     List<long> results = new List<long>();
     for (long i = 0; i <= time; i++)
     {
-        // Using the quadratic relationship to calculate distance
-        long distance = -i * i + time * i; // This line replaces the previous distance calculation
+        long distance = -i * i + time * i; 
         results.Add(distance);
     }
     part2FinalResults.Add(part2Count, results);
