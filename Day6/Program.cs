@@ -47,7 +47,10 @@ foreach (var time in part2Times)
     List<long> results = new List<long>();
     for (long i = 0; i <= time; i++)
     {
-        long distance = -i * i + time * i; 
+        long distance = 0;
+        long speed = 0;
+        long remainingTime = time - i;
+        distance = i * remainingTime;
         results.Add(distance);
     }
     part2FinalResults.Add(part2Count, results);
