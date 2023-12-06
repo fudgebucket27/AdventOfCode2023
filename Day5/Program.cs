@@ -43,35 +43,107 @@ class Program
 
 
         //Part 2 DOESNT WORK GG
-        var seedRanges = ExtractSeedsRanges(firstLine);
-        List<long> part2Result = new List<long>();
-        // Process each range of seeds
-        foreach (var range in seedRanges)
-        {
-            for (long seed = range.Item1; seed < range.Item1 + range.Item2; seed++)
-            {
-                long conversionResult = seed;
-                foreach (var map in maps)
-                {
-                    foreach (var line in map.Value)
-                    {
-                        var destinationRangeStart = line[0];
-                        var sourceRangeStart = line[1];
-                        var sourceRangeLength = line[2];
-                        var sourceRangeEnd = sourceRangeStart + sourceRangeLength;
+        // Read the file (replace "path_to_file.txt" with the actual file path)
+        string[] lines = File.ReadAllLines("input.txt");
+        var seedRanges = ParseSeedRanges(lines[0]);
+        var parsedmaps = ParseMaps(lines.Skip(1).ToArray());
 
-                        if (conversionResult >= sourceRangeStart && conversionResult <= sourceRangeEnd)
-                        {
-                            conversionResult = destinationRangeStart + (conversionResult - sourceRangeStart);
-                            break;
-                        }
-                    }
-                }
-                part1Result.Add(conversionResult);
+        long minLocation = long.MaxValue;
+
+        foreach (var (start, length) in seedRanges)
+        {
+            for (long i = 0; i < length; i++)
+            {
+                long seed = start + i;
+                long location = MapSeedToLocation(seed, parsedmaps);
+                minLocation = Math.Min(minLocation, location);
             }
         }
-        Console.WriteLine($"Part 2: Lowest Location number: {part2Result.Min()}");
 
+        Console.WriteLine($"The lowest location number is: {minLocation}");
+
+
+    }
+
+    static List<(long start, long length)> ParseSeedRanges(string line)
+    {
+        var parts = line.Split(new[] { ' ', ':' }, StringSplitOptions.RemoveEmptyEntries);
+        var ranges = new List<(long start, long length)>();
+        for (long i = 1; i < parts.Length; i += 2)
+        {
+            ranges.Add((long.Parse(parts[i]), long.Parse(parts[i + 1])));
+        }
+        return ranges;
+    }
+
+    static List<Dictionary<long, (long destStart, long srcStart, long rangeLength)>> ParseMaps(string[] lines)
+    {
+        var maps = new List<Dictionary<long, (long destStart, long srcStart, long rangeLength)>>();
+        Dictionary<long, (long, long, long)> currentMap = null;
+
+        foreach (var line in lines)
+        {
+            if (string.IsNullOrWhiteSpace(line))
+            {
+                continue;
+            }
+
+            if (line.Contains("map:"))
+            {
+                if (currentMap != null)
+                {
+                    maps.Add(currentMap);
+                }
+                currentMap = new Dictionary<long, (long, long, long)>();
+            }
+            else
+            {
+                var parts = line.Split(' ').Select(long.Parse).ToArray();
+                if (parts.Length == 4) // Check if the line has exactly 4 parts
+                {
+                    currentMap[parts[0]] = (parts[1], parts[2], parts[3]);
+                }
+                else
+                {
+                    // Handle error or invalid line format
+                    Console.WriteLine($"Invalid line format: {line}");
+                }
+            }
+        }
+        if (currentMap != null)
+        {
+            maps.Add(currentMap); // Add the last map
+        }
+
+        return maps;
+    }
+
+
+    static long MapSeedToLocation(long seed, List<Dictionary<long, (long destStart, long srcStart, long rangeLength)>> maps)
+    {
+        long currentNumber = seed;
+
+        foreach (var map in maps)
+        {
+            currentNumber = MapNumber(currentNumber, map);
+        }
+
+        return currentNumber;
+    }
+
+    static long MapNumber(long number, Dictionary<long, (long destStart, long srcStart, long rangeLength)> map)
+    {
+        foreach (var entry in map)
+        {
+            var (destStart, srcStart, rangeLength) = entry.Value;
+
+            if (number >= srcStart && number < srcStart + rangeLength)
+            {
+                return destStart + (number - srcStart);
+            }
+        }
+
+        return number; // If the number isn't in the map, it maps to itself
     }
 
     static List<Tuple<long, long>> ExtractSeedsRanges(string line)
