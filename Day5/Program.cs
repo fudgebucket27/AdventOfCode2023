@@ -42,7 +42,7 @@ class Program
         Console.WriteLine($"Part 1: Lowest Location number: {part1Result.Min()}");
 
 
-        //Part 2
+        //Part 2 DOESNT WORK GG
         var seedRanges = ExtractSeedsRanges(firstLine);
         List<long> part2Result = new List<long>();
         // Process each range of seeds
