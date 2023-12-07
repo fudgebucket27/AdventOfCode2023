@@ -30,8 +30,8 @@ foreach (var line in input)
 
     bool isFiveOfAKind = groups.Any(g => g.Count == 5);
     bool isFourOfAKind = groups.Any(g => g.Count == 4);
-    bool isFullHouse = groups.Count == 2 && groups[0].Count == 2 && groups[1].Count == 3;
-    bool isThreeOfAKind = groups.Any(g => g.Count == 3);
+    bool isFullHouse = groups.Count == 2 && ((groups[0].Count == 3 && groups[1].Count == 2) || (groups[0].Count == 2 && groups[1].Count == 3));
+    bool isThreeOfAKind = groups.Count == 3 && groups.Any(g => g.Count == 3);
     bool isTwoPair = groups.Count(g => g.Count == 2) == 2;
     bool isOnePair = groups.Count(g => g.Count == 2) == 1 && groups.Count(g => g.Count == 1) == 3;
     bool isHighCard = groups.All(g => g.Count == 1);
