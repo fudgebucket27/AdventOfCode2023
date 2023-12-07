@@ -33,7 +33,7 @@ foreach (var line in lines)
                 schematics.Add(schematic);
             }
             scanned = character.ToString();
-            schematic = new Schematic()
+            var symbolSchematic = new Schematic()
             {
                 LineNumber = lineCount,
                 IsSymbol = true,
@@ -41,16 +41,15 @@ foreach (var line in lines)
                 minX = x,
                 minY = lineCount
             };
+            schematics.Add(symbolSchematic); // Add symbol schematic immediately
+            schematic = null; // Reset schematic for potentially new number
+            scanned = "";
         }
         else
         {
             // Continue accumulating digits into the current schematic
             scanned += character;
-            if (schematic != null)
-            {
-                schematic.Text = scanned;
-            }
-            else
+            if (schematic == null)
             {
                 // Start a new schematic if it's the beginning of a number
                 schematic = new Schematic()
@@ -62,8 +61,12 @@ foreach (var line in lines)
                     minY = lineCount
                 };
             }
+            else
+            {
+                schematic.Text = scanned; // Continue adding to existing schematic
+            }
         }
-        
+
         x++;
     }
 
@@ -73,6 +76,7 @@ foreach (var line in lines)
         schematics.Add(schematic);
     }
 }
+
 
 
 Dictionary<string, int>  matched = new Dictionary<string, int>();
