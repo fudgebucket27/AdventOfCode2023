@@ -77,9 +77,72 @@ foreach (var line in lines)
     }
 }
 
+//Part 1
+//Dictionary<string, int>  matched = new Dictionary<string, int>();
+//foreach (var currentSchematic in schematics.Where(x => x.IsSymbol == false))
+//{
+//    //Console.WriteLine("Schematic:" + currentSchematic.Text + ", Line:" + currentSchematic.LineNumber + ", X:" + currentSchematic.minX + ", Y:" + currentSchematic.minY);
 
+//    for (int i = 0; i < currentSchematic.Text.Length; i++)
+//    {
+//        var currentPosX = currentSchematic.minX + i;
+//        var currentPosY = currentSchematic.minY;
 
-Dictionary<string, int>  matched = new Dictionary<string, int>();
+//        int westX = currentPosX - 1;
+//        int westY = currentPosY;
+
+//        int eastX = currentPosX + 1;
+//        int eastY = currentPosY;
+
+//        int northX = currentPosX;
+//        int northY = currentPosY - 1;
+
+//        int southX = currentPosX;
+//        int southY = currentPosY + 1;
+
+//        int southWestX = currentPosX - 1;
+//        int southWestY = currentPosY + 1;
+
+//        int southEastX = currentPosX + 1;
+//        int southEastY = currentPosY + 1;
+
+//        int northWestX = currentPosX - 1;
+//        int northWestY = currentPosY - 1;
+
+//        int northEastX = currentPosX + 1;
+//        int northEastY = currentPosY - 1;
+
+//        foreach (var toMatch in schematics.Where(x => x.IsSymbol == true))
+//        {
+//            if ((toMatch.minX == westX && toMatch.minY == westY) ||
+//                (toMatch.minX == eastX && toMatch.minY == eastY) ||
+//                (toMatch.minX == northX && toMatch.minY == northY) ||
+//                (toMatch.minX == southX && toMatch.minY == southY) ||
+//                (toMatch.minX == southWestX && toMatch.minY == southWestY) ||
+//                (toMatch.minX == southEastX && toMatch.minY == southEastY) ||
+//                (toMatch.minX == northWestX && toMatch.minY == northWestY) ||
+//                (toMatch.minX == northEastX && toMatch.minY == northEastY))
+//            {
+//                var key = $"{currentSchematic.Text},{currentSchematic.minX},{currentSchematic.minY}";
+//                if (!matched.ContainsKey(key))
+//                {
+//                    matched.Add(key, Int32.Parse(currentSchematic.Text));
+//                }
+//                Console.WriteLine($"Match found: {currentSchematic.Text} at ({currentSchematic.minX}, {currentSchematic.LineNumber}) matches with {toMatch.Text} at ({toMatch.minX}, {toMatch.minY})");
+//            }
+//        }
+//    }
+//}
+//var sum = 0;
+//foreach(var match in matched)
+//{
+//    sum += match.Value;
+//}
+//Console.WriteLine(sum);
+
+//Part 2
+Dictionary<string, int> partsDictionary = new Dictionary<string, int>();
+Dictionary<string, (int x, int y)> symbolsDictionary = new Dictionary<string, (int x, int y)>();
 foreach (var currentSchematic in schematics.Where(x => x.IsSymbol == false))
 {
     //Console.WriteLine("Schematic:" + currentSchematic.Text + ", Line:" + currentSchematic.LineNumber + ", X:" + currentSchematic.minX + ", Y:" + currentSchematic.minY);
@@ -124,18 +187,23 @@ foreach (var currentSchematic in schematics.Where(x => x.IsSymbol == false))
                 (toMatch.minX == northWestX && toMatch.minY == northWestY) ||
                 (toMatch.minX == northEastX && toMatch.minY == northEastY))
             {
-                var key = $"{currentSchematic.Text},{currentSchematic.minX},{currentSchematic.minY}";
-                if (!matched.ContainsKey(key))
+                var partsKey = $"{currentSchematic.Text},{currentSchematic.minX},{currentSchematic.minY}";
+                if (!partsDictionary.ContainsKey(partsKey))
                 {
-                    matched.Add(key, Int32.Parse(currentSchematic.Text));
+                    partsDictionary.Add(partsKey, Int32.Parse(currentSchematic.Text));
+                }
+
+                var symbolsKey = $"{toMatch.Text},{toMatch.minX},{toMatch.minY}";
+                if (!symbolsDictionary.ContainsKey(symbolsKey))
+                {
+                    symbolsDictionary.Add(symbolsKey, (toMatch.minX, toMatch.minY));
                 }
                 Console.WriteLine($"Match found: {currentSchematic.Text} at ({currentSchematic.minX}, {currentSchematic.LineNumber}) matches with {toMatch.Text} at ({toMatch.minX}, {toMatch.minY})");
             }
         }
     }
 }
-var sum = 0;
-foreach(var match in matched)
+foreach (var match in matched)
 {
     sum += match.Value;
 }
