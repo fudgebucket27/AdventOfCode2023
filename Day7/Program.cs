@@ -130,9 +130,10 @@ foreach (var line in input)
 
     bool isFourOfAKind = !isFiveOfAKind && (groups.Any(g => g.Count + jokerCount == 4));
 
-    bool isFullHouse = !isFourOfAKind && ((groups.Any(g => g.Count == 3) && jokerCount >= 1) ||
-                                          (groups.Count(g => g.Count == 2) == 2) ||
-                                          (groups.Any(g => g.Count == 2) && jokerCount >= 2));
+    bool isFullHouse = !isFourOfAKind &&
+                       (groups.Count == 2 && groups.Any(g => g.Count == 3)) || // Standard Full House
+                       (groups.Count == 2 && groups.Any(g => g.Count == 2) && jokerCount >= 1); // Pair, another different pair, and at least one joker
+
 
     bool isThreeOfAKind = !isFullHouse && (groups.Any(g => g.Count + jokerCount == 3));
 
