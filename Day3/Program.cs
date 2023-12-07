@@ -215,4 +215,26 @@ var query = partsDictionary
     .Where(g => g.Count() == 2) // Ensure symbolY appears exactly twice
     .SelectMany(g => g)
     .ToDictionary(g => g.Key, g => g.Value);
-Console.WriteLine("END");
+
+var keys = query.Keys.ToList(); // Getting a list of keys
+var sum = 0;
+for (int i = 0; i < keys.Count; i += 2)
+{
+    var key1 = keys[i];
+    var value1 = partsDictionary[key1];
+
+    // Check if there is a next pair available
+    if (i + 1 < keys.Count)
+    {
+        var key2 = keys[i + 1];
+        var value2 = partsDictionary[key2];
+        sum += value1.gear * value2.gear;
+    }
+    else
+    {
+        // Handle the case where there's an odd number of entries
+        // Process the last single entry (key1, value1)
+        // Add your logic here
+    }
+}
+Console.WriteLine(sum);
