@@ -203,8 +203,3 @@ foreach (var currentSchematic in schematics.Where(x => x.IsSymbol == false))
         }
     }
 }
-foreach (var match in matched)
-{
-    sum += match.Value;
-}
-Console.WriteLine(sum);
