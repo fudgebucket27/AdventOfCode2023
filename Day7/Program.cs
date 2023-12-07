@@ -172,11 +172,11 @@ foreach (var line in input)
     hand.Cards = parts[0];
     hand.Bid = Int32.Parse(parts[1]);
     hand.OverallStrength = handOverallStrength;
-    hand.Strength1 = strengths[parts[0][0]];
-    hand.Strength2 = strengths[parts[0][1]];
-    hand.Strength3 = strengths[parts[0][2]];
-    hand.Strength4 = strengths[parts[0][3]];
-    hand.Strength5 = strengths[parts[0][4]];
+    hand.Strength1 = part2Strengths[parts[0][0]];
+    hand.Strength2 = part2Strengths[parts[0][1]];
+    hand.Strength3 = part2Strengths[parts[0][2]];
+    hand.Strength4 = part2Strengths[parts[0][3]];
+    hand.Strength5 = part2Strengths[parts[0][4]];
     part2Hands.Add(hand);
 
 }
