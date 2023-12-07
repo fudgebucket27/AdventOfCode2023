@@ -120,29 +120,21 @@ List<Hand> part2Hands = new List<Hand>();
 foreach (var line in input)
 {
     var parts = line.Split(' ');
+  
+
+    int jokerCount = parts[0].Count(c => c == 'J');
     var groups = parts[0].GroupBy(c => c)
                      .Select(group => new { Label = group.Key, Count = group.Count() })
                      .ToList();
 
-    int jokerCount = parts[0].Count(c => c == 'J');
-
-    bool isFiveOfAKind = groups.Any(g => g.Count + jokerCount >= 5);
-
-    bool isFourOfAKind = !isFiveOfAKind && (groups.Any(g => g.Count + jokerCount == 4));
-
-    bool isFullHouse = !isFourOfAKind &&
-                       (groups.Count == 2 && groups.Any(g => g.Count == 3)) || // Standard Full House
-                       (groups.Count == 2 && groups.Any(g => g.Count == 2) && jokerCount >= 1); // Pair, another different pair, and at least one joker
-
-
-    bool isThreeOfAKind = !isFullHouse && (groups.Any(g => g.Count + jokerCount == 3));
-
-    bool isTwoPair = !isThreeOfAKind && (groups.Count(g => g.Count == 2) + (jokerCount >= 1 ? 1 : 0) == 2);
-
-    bool isOnePair = !isTwoPair && (groups.Count(g => g.Count == 2) + (jokerCount >= 1 ? 1 : 0) == 1);
-
-    bool isHighCard = !isOnePair && groups.All(g => g.Count == 1);
-
+    bool isFiveOfAKind = groups.Any(g => g.Count + jokerCount == 5);
+    bool isFourOfAKind = groups.Any(g => g.Count + jokerCount == 4);
+    bool isFullHouse = (groups.Count == 2 && groups[0].Count + jokerCount >= 3 && groups[1].Count + jokerCount >= 2) ||
+                       (groups.Count == 1 && jokerCount > 0);
+    bool isThreeOfAKind = groups.Any(g => g.Count + jokerCount == 3) && !isFullHouse;
+    bool isTwoPair = groups.Count >= 2 && groups[0].Count + jokerCount >= 2 && groups[1].Count + jokerCount >= 2;
+    bool isOnePair = groups.Any(g => g.Count + jokerCount == 2) && !isTwoPair && !isThreeOfAKind && !isFullHouse;
+    bool isHighCard = groups.All(g => g.Count == 1) && jokerCount == 0;
 
 
     var handOverallStrength = 0;
@@ -180,12 +172,13 @@ foreach (var line in input)
     hand.Cards = parts[0];
     hand.Bid = Int32.Parse(parts[1]);
     hand.OverallStrength = handOverallStrength;
-    hand.Strength1 = part2Strengths[parts[0][0]];
-    hand.Strength2 = part2Strengths[parts[0][1]];
-    hand.Strength3 = part2Strengths[parts[0][2]];
-    hand.Strength4 = part2Strengths[parts[0][3]];
-    hand.Strength5 = part2Strengths[parts[0][4]];
+    hand.Strength1 = strengths[parts[0][0]];
+    hand.Strength2 = strengths[parts[0][1]];
+    hand.Strength3 = strengths[parts[0][2]];
+    hand.Strength4 = strengths[parts[0][3]];
+    hand.Strength5 = strengths[parts[0][4]];
     part2Hands.Add(hand);
+
 }
 
 var part2SortedHands = part2Hands.OrderBy(h => h.OverallStrength)
