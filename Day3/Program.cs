@@ -111,14 +111,14 @@ foreach (var currentSchematic in schematics.Where(x => x.IsSymbol == false))
 
         foreach (var toMatch in schematics.Where(x => x.IsSymbol == true))
         {
-            if ((toMatch.minX == westX && toMatch.LineNumber == westY) ||
-                (toMatch.minX == eastX && toMatch.LineNumber == eastY) ||
-                (toMatch.minX == northX && toMatch.LineNumber == northY) ||
-                (toMatch.minX == southX && toMatch.LineNumber == southY) ||
-                (toMatch.minX == southWestX && toMatch.LineNumber == southWestY) ||
-                (toMatch.minX == southEastX && toMatch.LineNumber == southEastY) ||
-                (toMatch.minX == northWestX && toMatch.LineNumber == northWestY) ||
-                (toMatch.minX == northEastX && toMatch.LineNumber == northEastY))
+            if ((toMatch.minX == westX && toMatch.minY == westY) ||
+                (toMatch.minX == eastX && toMatch.minY == eastY) ||
+                (toMatch.minX == northX && toMatch.minY == northY) ||
+                (toMatch.minX == southX && toMatch.minY == southY) ||
+                (toMatch.minX == southWestX && toMatch.minY == southWestY) ||
+                (toMatch.minX == southEastX && toMatch.minY == southEastY) ||
+                (toMatch.minX == northWestX && toMatch.minY == northWestY) ||
+                (toMatch.minX == northEastX && toMatch.minY == northEastY))
             {
                 var key = $"{currentSchematic.Text},{currentSchematic.minX},{currentSchematic.minY}";
                 if (!matched.ContainsKey(key))
