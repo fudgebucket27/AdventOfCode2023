@@ -9,55 +9,76 @@ int lineCount = 0;
 foreach (var line in lines)
 {
     lineCount++;
-    int x = 0; // Reset x for each line
+    int x = 0;
     string scanned = "";
     Schematic? schematic = null;
+
     foreach (var character in line)
     {
         if (character == '.')
         {
-            scanned = "";
+            // End the current schematic and reset scanned when encountering a period
             if (schematic != null)
             {
                 schematics.Add(schematic);
                 schematic = null;
             }
+            scanned = "";
+        }
+        else if (!char.IsDigit(character))
+        {
+            // When encountering a symbol, end the current schematic and start a new one
+            if (schematic != null)
+            {
+                schematics.Add(schematic);
+            }
+            scanned = character.ToString();
+            schematic = new Schematic()
+            {
+                LineNumber = lineCount,
+                IsSymbol = true,
+                Text = scanned,
+                minX = x,
+                minY = lineCount
+            };
         }
         else
         {
-            if (scanned.Count() == 0 || !char.IsDigit(character))
+            // Continue accumulating digits into the current schematic
+            scanned += character;
+            if (schematic != null)
             {
-                if (scanned.Count() > 0)
-                {
-                    schematics.Add(schematic);
-                }
-                scanned = character.ToString();
-                schematic = new Schematic()
-                {
-                    LineNumber = lineCount,
-                    IsSymbol = !char.IsDigit(character),
-                    Text = scanned,
-                    minX = x,
-                    minY = lineCount // Using lineCount as y-coordinate
-                };
+                schematic.Text = scanned;
             }
             else
             {
-                scanned += character;
-                schematic.Text = scanned;
+                // Start a new schematic if it's the beginning of a number
+                schematic = new Schematic()
+                {
+                    LineNumber = lineCount,
+                    IsSymbol = false,
+                    Text = scanned,
+                    minX = x,
+                    minY = lineCount
+                };
             }
         }
+        
         x++;
     }
-    if (scanned.Count() > 0)
+
+    // Add the last schematic if it exists and has content
+    if (schematic != null && schematic.Text != "")
     {
         schematics.Add(schematic);
     }
 }
+
+
 Dictionary<string, int>  matched = new Dictionary<string, int>();
 foreach (var currentSchematic in schematics.Where(x => x.IsSymbol == false))
 {
-    Console.WriteLine("Schematic:" + currentSchematic.Text + ", Line:" + currentSchematic.LineNumber + ", X:" + currentSchematic.minX + ", Y:" + currentSchematic.minY);
+    //Console.WriteLine("Schematic:" + currentSchematic.Text + ", Line:" + currentSchematic.LineNumber + ", X:" + currentSchematic.minX + ", Y:" + currentSchematic.minY);
 
     for (int i = 0; i < currentSchematic.Text.Length; i++)
     {
@@ -99,8 +120,8 @@ foreach (var currentSchematic in schematics.Where(x => x.IsSymbol == false))
                 (toMatch.minX == northWestX && toMatch.LineNumber == northWestY) ||
                 (toMatch.minX == northEastX && toMatch.LineNumber == northEastY))
             {
-                var key = $"{currentSchematic.minX},{currentSchematic.minY}";
-                if(!matched.ContainsKey(key))
+                var key = $"{currentSchematic.Text},{currentSchematic.minX},{currentSchematic.minY}";
+                if (!matched.ContainsKey(key))
                 {
                     matched.Add(key, Int32.Parse(currentSchematic.Text));
                 }
