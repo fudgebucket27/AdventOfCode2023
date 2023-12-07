@@ -1,4 +1,7 @@
-﻿var input = File.ReadAllLines("input.txt");
+﻿using Day7;
+using System.Numerics;
+
+var input = File.ReadAllLines("input.txt");
 
 var strengths = new Dictionary<char, int>()
 {
@@ -17,7 +20,7 @@ var strengths = new Dictionary<char, int>()
     { '2', 2 },
 };
 
-List<(string, int, int)> hands = new List<(string, int, int)>();
+List<Hand> hands = new List<Hand>();
 foreach (var line in input)
 {
     var parts = line.Split(' ');
@@ -33,44 +36,64 @@ foreach (var line in input)
     bool isOnePair = groups.Count(g => g.Count == 2) == 1 && groups.Count(g => g.Count == 1) == 3;
     bool isHighCard = groups.All(g => g.Count == 1);
 
-    var handScore = 0;
+    var handOverallStrength = 0;
     if (isFiveOfAKind)
     {
-        handScore += 7;
+        handOverallStrength += 7;
     }
     else if (isFourOfAKind)
     {
-        handScore += 6;
+        handOverallStrength += 6;
     }
     else if (isFullHouse)
     {
-        handScore += 5;
+        handOverallStrength += 5;
     }
     else if (isThreeOfAKind)
     {
-        handScore += 4;
+        handOverallStrength += 4;
     }
     else if (isTwoPair)
     {
-        handScore += 3;
+        handOverallStrength += 3;
     }
     else if (isOnePair)
     {
-        handScore += 2;
+        handOverallStrength += 2;
     }
     else if (isHighCard)
     {
-        handScore += 1;
+        handOverallStrength += 1;
 
     }
 
-    foreach (var card in parts[0])
-    {
-        handScore += strengths[card];
-    }
-
-    hands.Add((parts[0], Int32.Parse(parts[1]), handScore));
+    Hand hand = new Hand();
+    hand.Cards = parts[0];
+    hand.Bid = Int32.Parse(parts[1]);
+    hand.OverallStrength = handOverallStrength;
+    hand.Strength1 = strengths[parts[0][0]];
+    hand.Strength2 = strengths[parts[0][1]];
+    hand.Strength3 = strengths[parts[0][2]];
+    hand.Strength4 = strengths[parts[0][3]];
+    hand.Strength5 = strengths[parts[0][4]];
+    hands.Add(hand);
 }
 
-hands.Sort((x, y) => x.Item2.CompareTo(y.Item2));
-Console.WriteLine("END");
+var sortedHands = hands.OrderBy(h => h.OverallStrength)
+                       .ThenBy(h => h.Strength1)
+                       .ThenBy(h => h.Strength2)
+                       .ThenBy(h => h.Strength3)
+                       .ThenBy(h => h.Strength4)
+                       .ThenBy(h => h.Strength5)
+                       .ToList();
+
+var totalWinnings = 0;
+var rank = 0;
+foreach (var hand in sortedHands)
+{
+    rank++;
+    //Console.WriteLine($"Cards: {hand.Cards}, Bid: {hand.Bid}, OverallStrength: {hand.OverallStrength}, Strength1: {hand.Strength1}, Strength2: {hand.Strength2}, Strength3: {hand.Strength3}, Strength4: {hand.Strength4}, Strength5: {hand.Strength5}");
+    totalWinnings += hand.Bid * rank;
+}
+
+Console.WriteLine(totalWinnings);
