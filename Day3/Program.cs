@@ -141,7 +141,7 @@ foreach (var line in lines)
 //Console.WriteLine(sum);
 
 //Part 2
-Dictionary<string, int> partsDictionary = new Dictionary<string, int>();
+Dictionary<string, (int gear, int symbolX, int symbolY)> partsDictionary = new Dictionary<string, (int gear, int symbolX, int symbolY)>();
 Dictionary<string, (int x, int y)> symbolsDictionary = new Dictionary<string, (int x, int y)>();
 foreach (var currentSchematic in schematics.Where(x => x.IsSymbol == false))
 {
@@ -176,7 +176,7 @@ foreach (var currentSchematic in schematics.Where(x => x.IsSymbol == false))
         int northEastX = currentPosX + 1;
         int northEastY = currentPosY - 1;
 
-        foreach (var toMatch in schematics.Where(x => x.IsSymbol == true))
+        foreach (var toMatch in schematics.Where(x => x.IsSymbol == true && x.Text == "*"))
         {
             if ((toMatch.minX == westX && toMatch.minY == westY) ||
                 (toMatch.minX == eastX && toMatch.minY == eastY) ||
@@ -190,7 +190,7 @@ foreach (var currentSchematic in schematics.Where(x => x.IsSymbol == false))
                 var partsKey = $"{currentSchematic.Text},{currentSchematic.minX},{currentSchematic.minY}";
                 if (!partsDictionary.ContainsKey(partsKey))
                 {
-                    partsDictionary.Add(partsKey, Int32.Parse(currentSchematic.Text));
+                    partsDictionary.Add(partsKey, (Int32.Parse(currentSchematic.Text), toMatch.minX, toMatch.minY));
                 }
 
                 var symbolsKey = $"{toMatch.Text},{toMatch.minX},{toMatch.minY}";
@@ -203,3 +203,16 @@ foreach (var currentSchematic in schematics.Where(x => x.IsSymbol == false))
         }
     }
 }
+
+var query = partsDictionary
+    .GroupBy(p => new { p.Value.symbolX, p.Value.symbolY })
+    .Where(g => g.Count() == 2) // Ensure the group has exactly two items
+    .SelectMany(g => g)
+    .GroupBy(p => p.Value.symbolX)
+    .Where(g => g.Count() == 2) // Ensure symbolX appears exactly twice
+    .SelectMany(g => g)
+    .GroupBy(p => p.Value.symbolY)
+    .Where(g => g.Count() == 2) // Ensure symbolY appears exactly twice
+    .SelectMany(g => g)
+    .ToDictionary(g => g.Key, g => g.Value);
+Console.WriteLine("END");
