@@ -24,5 +24,10 @@ foreach (var line in input)
     var handValues = Tuple.Create(parts[0], Int32.Parse(parts[1]));
     hands.Add(handValues);
 }
-Console.WriteLine("BRA");
 
+foreach(var hand in hands)
+{
+    var cards = hand.Item1;
+    var bid = hand.Item2;
+    Console.WriteLine(cards);
+}
