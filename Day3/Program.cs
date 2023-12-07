@@ -125,7 +125,7 @@ foreach (var currentSchematic in schematics.Where(x => x.IsSymbol == false))
                 {
                     matched.Add(key, Int32.Parse(currentSchematic.Text));
                 }
-                Console.WriteLine($"Match found: {currentSchematic.Text} at ({currentSchematic.minX}, {currentSchematic.LineNumber}) matches with {toMatch.Text} at ({toMatch.minX}, {toMatch.LineNumber})");
+                Console.WriteLine($"Match found: {currentSchematic.Text} at ({currentSchematic.minX}, {currentSchematic.LineNumber}) matches with {toMatch.Text} at ({toMatch.minX}, {toMatch.minY})");
             }
         }
     }
